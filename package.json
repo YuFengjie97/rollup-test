@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rollup -c",
-    "serve": "rollup -c"
+    "serve": "rollup -c --watch"
   },
   "keywords": [],
   "author": "",

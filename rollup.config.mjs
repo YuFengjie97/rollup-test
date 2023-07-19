@@ -6,6 +6,9 @@ import autoprefixer from 'autoprefixer' // css自动前缀
 import commonjs from '@rollup/plugin-commonjs' // 可以使用commonjs模块的包了
 import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
+import path from 'node:path'
+
+console.log(path.resolve('./dist'));
 
 export default {
   input: 'src/index.ts',
@@ -21,9 +24,9 @@ export default {
       plugins: [autoprefixer()],
     }),
     strip(),
-    livereload(),
+    livereload(path.resolve('./dist')),
     serve({
-      open: true,
+      open: false,
       port: 8080,
       contentBase: '',
     }),

@@ -824,7 +824,7 @@ distribute = function distribute(v) {
     return is2D || closest === raw || _isNumber(raw) ? closest : closest + getUnit(raw);
   });
 },
-    random = function random(min, max, roundingIncrement, returnFunction) {
+    random$1 = function random(min, max, roundingIncrement, returnFunction) {
   return _conditionalReturn(_isArray(min) ? !max : roundingIncrement === true ? !!(roundingIncrement = 0) : !returnFunction, function () {
     return _isArray(min) ? min[~~(Math.random() * min.length)] : (roundingIncrement = roundingIncrement || 1e-5) && (returnFunction = roundingIncrement < 1 ? Math.pow(10, (roundingIncrement + "").length - 2) : 1) && Math.floor(Math.round((min - roundingIncrement / 2 + Math.random() * (max - min + roundingIncrement * .99)) / roundingIncrement) * roundingIncrement * returnFunction) / returnFunction;
   });
@@ -881,7 +881,7 @@ distribute = function distribute(v) {
     end = value.indexOf(")", i);
     isArray = value.charAt(i + 7) === "[";
     nums = value.substr(i + 7, end - i - 7).match(isArray ? _delimitedValueExp : _strictNumExp);
-    s += value.substr(prev, i - prev) + random(isArray ? nums : +nums[0], isArray ? 0 : +nums[1], +nums[2] || 1e-5);
+    s += value.substr(prev, i - prev) + random$1(isArray ? nums : +nums[0], isArray ? 0 : +nums[1], +nums[2] || 1e-5);
     prev = end + 1;
   }
 
@@ -4274,7 +4274,7 @@ var _gsap = {
     wrap: wrap,
     wrapYoyo: wrapYoyo,
     distribute: distribute,
-    random: random,
+    random: random$1,
     snap: snap,
     normalize: normalize,
     getUnit: getUnit,
@@ -6037,14 +6037,12 @@ function styleInject(css, ref) {
 var css_248z = "* {\n  margin: 0;\n  padding: 0;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\nbody {\n  height: 100vh;\n  background-color: #000;\n}\n";
 styleInject(css_248z);
 
-console.log(gsapWithCSS);
+const { random, floor } = Math;
 function getPosCssText(info) {
     return `
     position: absolute;
     left: ${info.x}px;
     top: ${info.y}px;
-    width: ${info.w}px;
-    height: ${info.h}px
     `;
 }
 function getEl(shape, info) {
@@ -6055,11 +6053,57 @@ function getEl(shape, info) {
     (_a = document.querySelector('body')) === null || _a === void 0 ? void 0 : _a.appendChild(el);
     return el;
 }
+function getCircle(el, op) {
+    const cssTextOld = el.style.cssText;
+    el.style.cssText = `
+  ${cssTextOld}
+  width: ${op.size}px;
+  height: ${op.size}px;
+  border-radius: 50%;
+  border: ${op.borderWidth}px solid ${op.borderColor};`;
+    return el;
+}
+function anima(el, count = 10) {
+    const tl = gsapWithCSS.timeline();
+    for (let i = 0; i < count; i += 1) {
+        const isX = random() > 0.5; // 是否水平方向平移
+        const isPositive = random() > 0.5; // 是否正方向平移
+        const td = random() * 10; // 平移单位
+        const isShow = random() > 0.8; // 是否隐藏
+        if (isShow) {
+            tl.to(el, {
+                x: isX ? (isPositive ? td : -td) : 0,
+                y: !isX ? (isPositive ? td : -td) : 0,
+                opacity: 1,
+                duration: 0.1,
+                repeat: -1,
+            }, i === 0 ? 0 : '+=0');
+        }
+        else {
+            tl.to(el, {
+                opacity: 0,
+                duration: 1,
+                repeat: -1,
+            }, i === 0 ? 0 : '+=0');
+        }
+    }
+}
 window.onload = function () {
-    const e = getEl('circle', { x: 100, y: 100, w: 100, h: 100 });
-    console.log(e);
-    gsapWithCSS.to(e, {
-        x: 200,
-        duration: 1,
-    });
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    for (let i = 0; i < 20; i += 1) {
+        const elInfo = {
+            x: width * random(),
+            y: height * random(),
+        };
+        // const c = randomColor()
+        const c = '#fff';
+        const e = getEl('circle', elInfo);
+        const circle = getCircle(e, {
+            size: 40 + random() * 40,
+            borderWidth: 2 + random() * 4,
+            borderColor: c
+        });
+        anima(circle);
+    }
 };
