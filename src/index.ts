@@ -1,4 +1,5 @@
 import {gsap} from 'gsap'
+import './style.less'
 
 console.log(gsap)
 
