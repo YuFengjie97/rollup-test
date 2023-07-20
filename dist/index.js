@@ -6038,21 +6038,6 @@ var css_248z = "* {\n  margin: 0;\n  padding: 0;\n  -webkit-box-sizing: border-b
 styleInject(css_248z);
 
 const { random, floor } = Math;
-function getPosCssText(info) {
-    return `
-    position: absolute;
-    left: ${info.x}px;
-    top: ${info.y}px;
-    `;
-}
-function getEl(shape, info) {
-    var _a;
-    const el = document.createElement('div');
-    el.classList.add(shape);
-    el.style.cssText = getPosCssText(info);
-    (_a = document.querySelector('body')) === null || _a === void 0 ? void 0 : _a.appendChild(el);
-    return el;
-}
 function getCircle(el, op) {
     const cssTextOld = el.style.cssText;
     el.style.cssText = `
@@ -6068,21 +6053,22 @@ function anima(el, count = 10) {
     for (let i = 0; i < count; i += 1) {
         const isX = random() > 0.5; // 是否水平方向平移
         const isPositive = random() > 0.5; // 是否正方向平移
-        const td = random() * 10; // 平移单位
+        const td = random() * 4; // 平移单位
         const isShow = random() > 0.8; // 是否隐藏
+        const duration = 0.7;
         if (isShow) {
             tl.to(el, {
                 x: isX ? (isPositive ? td : -td) : 0,
                 y: !isX ? (isPositive ? td : -td) : 0,
                 opacity: 1,
-                duration: 0.1,
+                duration,
                 repeat: -1,
             }, i === 0 ? 0 : '+=0');
         }
         else {
             tl.to(el, {
                 opacity: 0,
-                duration: 1,
+                duration,
                 repeat: -1,
             }, i === 0 ? 0 : '+=0');
         }

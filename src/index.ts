@@ -3,26 +3,9 @@ import './style.less'
 
 const { random, floor } = Math
 
-type Shape = 'circle' | 'matrix' | 'cross'
-interface Info {
+interface Pos {
   x: number
   y: number
-}
-
-function getPosCssText(info: Info) {
-  return `
-    position: absolute;
-    left: ${info.x}px;
-    top: ${info.y}px;
-    `
-}
-
-function getEl(shape: Shape, info: Info) {
-  const el = document.createElement('div')
-  el.classList.add(shape)
-  el.style.cssText = getPosCssText(info)
-  document.querySelector('body')?.appendChild(el)
-  return el
 }
 
 function randomColor() {
@@ -31,6 +14,40 @@ function randomColor() {
   const b = floor(random() * 255)
   return `rgb(${r},${g},${b})`
 }
+
+class Shpae {
+  x: number
+  y: number
+  el: HTMLElement
+  constructor(pos: Pos) {
+    this.x = pos.x
+    this.y = pos.y
+    const body = document.querySelector('body')
+    this.el = document.createElement('div')
+    this.el.style.cssText = `
+      position: absolute;
+      left: ${this.x}px;
+      top: ${this.y}px;
+    `
+    body?.appendChild(this.el)
+  }
+}
+
+class Circle extends Shpae{
+  constructor(pos: Pos, size: number, borderWidth: number, borderColor: string) {
+    super(pos)
+    const {cssText} = this.el.style
+    this.el.style.cssText = `
+      ${cssText}
+      border-radius: 50%;
+      width: ${size}px;
+      height: ${size}px;
+      border: ${borderWidth}px  solid ${borderColor};
+    `
+  }
+}
+
+
 
 function getCircle(
   el: HTMLElement,
@@ -55,8 +72,9 @@ function anima(el: HTMLElement, count = 10) {
   for (let i = 0; i < count; i += 1) {
     const isX = random() > 0.5 // 是否水平方向平移
     const isPositive = random() > 0.5 // 是否正方向平移
-    const td = random() * 10 // 平移单位
+    const td = random() * 4 // 平移单位
     const isShow = random() > 0.8 // 是否隐藏
+    const duration = 0.7
     if (isShow) {
       tl.to(
         el,
@@ -64,7 +82,7 @@ function anima(el: HTMLElement, count = 10) {
           x: isX ? (isPositive ? td : -td) : 0,
           y: !isX ? (isPositive ? td : -td) : 0,
           opacity: 1,
-          duration: 0.1,
+          duration,
           repeat: -1,
         },
         i === 0 ? 0 : '+=0'
@@ -74,7 +92,7 @@ function anima(el: HTMLElement, count = 10) {
         el,
         {
           opacity: 0,
-          duration: 1,
+          duration,
           repeat: -1,
         },
         i === 0 ? 0 : '+=0'
