@@ -57,7 +57,7 @@ class Shape {
           y: `+=${isX ? 0 : isPositive ? td : -td}`,
           scale: scaleXD,
           scaleY: scaleYD,
-          opacity: isShow ? 1 : 0.5,
+          opacity: isShow ? 1 : 0.1,
           duration,
         },
         i === 0 ? '' : '+=0'
