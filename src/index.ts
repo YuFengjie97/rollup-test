@@ -153,12 +153,6 @@ class Bar extends Shape {
   }
 }
 
-class Drum extends Shape {
-  constructor(pos: Pos) {
-    super(pos, 'drum')
-  }
-}
-
 window.onload = function () {
   const width = window.innerWidth
   const height = window.innerHeight
