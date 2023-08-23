@@ -12,7 +12,8 @@
     "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
     "strict": true,                                      /* Enable all strict type-checking options. */
     "lib": ["DOM", "ES6"],
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
     /* Projects */
