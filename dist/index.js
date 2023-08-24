@@ -22825,7 +22825,7 @@ const { innerWidth, innerHeight } = window;
 const randomHex = () => {
     return mRandom() * 0xffffff;
 };
-const app = new Application({ resizeTo: window });
+const app = new Application({ resizeTo: window, background: 0x000 });
 document.body.appendChild(app.view);
 const totalParticals = 10000;
 const particleCon = new ParticleContainer(totalParticals, {
@@ -22833,7 +22833,7 @@ const particleCon = new ParticleContainer(totalParticals, {
     position: true,
     rotation: true,
     uvs: true,
-    alpha: true
+    alpha: true,
 });
 app.stage.addChild(particleCon);
 class Particle {
@@ -22844,7 +22844,9 @@ class Particle {
         this.fill = fill;
         app.stage.addChild(this.graphics);
     }
-    update() { }
+    update() {
+        this.x += 0.1;
+    }
     render() {
         this.graphics.clear();
         this.graphics.x = this.x;
@@ -22865,7 +22867,7 @@ const particles = [];
     }
 })();
 app.ticker.add((delta) => {
-    particles.forEach(p => {
+    particles.forEach((p) => {
         p.update();
         p.render();
     });

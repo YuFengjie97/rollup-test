@@ -8,7 +8,7 @@ const randomHex = () => {
   return mRandom() * 0xffffff
 }
 
-const app = new PIXI.Application({resizeTo: window})
+const app = new PIXI.Application({ resizeTo: window, background: 0x000 })
 document.body.appendChild(app.view as HTMLCanvasElement)
 
 const totalParticals = 10000
@@ -17,12 +17,12 @@ const particleCon = new PIXI.ParticleContainer(totalParticals, {
   position: true,
   rotation: true,
   uvs: true,
-  alpha: true
+  alpha: true,
 })
 
 app.stage.addChild(particleCon)
 
-class Particle{
+class Particle {
   graphics: PIXI.Graphics
   x: number
   y: number
@@ -34,7 +34,9 @@ class Particle{
     this.fill = fill
     app.stage.addChild(this.graphics)
   }
-  update() {}
+  update() {
+    this.x += 0.1
+  }
   render() {
     this.graphics.clear()
     this.graphics.x = this.x
@@ -47,7 +49,7 @@ class Particle{
 
 const particles: Array<Particle> = []
 ;(function initParticles() {
-  for(let i=0;i<totalParticals;i++) {
+  for (let i = 0; i < totalParticals; i++) {
     const x = mRandom() * innerWidth
     const y = mRandom() * innerHeight
     const c = randomHex()
@@ -57,9 +59,8 @@ const particles: Array<Particle> = []
 })()
 
 app.ticker.add((delta) => {
-  particles.forEach(p => {
+  particles.forEach((p) => {
     p.update()
     p.render()
   })
 })
-
